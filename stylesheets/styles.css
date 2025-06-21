@@ -268,3 +268,74 @@ footer {
     color:#444;
   }
 }
+
+/* Collapsible sections styles */
+.collapsible-section {
+  margin-bottom: 10px;
+}
+
+.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e5e5;
+  transition: color 0.3s ease;
+}
+
+.collapsible-header:hover {
+  color: #069;
+}
+
+.toggle-icon {
+  float: right;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: -2px;
+}
+
+.collapsible-content {
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.collapsible-content h3 {
+  margin-top: 15px;
+}
+
+.collapsible-content h3:first-child {
+  margin-top: 0;
+}
+
+/* Social links styles */
+.social-link {
+  display: inline-block;
+  padding: 8px;
+  margin: 0 4px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.1);
+}
+
+.social-link svg {
+  vertical-align: middle;
+  transition: fill 0.3s ease;
+}
+
+.social-link:hover svg[fill="#0077B5"] {
+  fill: #005885;
+}
+
+.social-link:hover svg[fill="#333"] {
+  fill: #000;
+}
+
+.social-link:hover svg[fill="#d32f2f"] {
+  fill: #b71c1c;
+}
