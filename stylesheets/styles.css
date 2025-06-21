@@ -309,23 +309,31 @@ footer {
 }
 
 /* Social links styles */
+.social-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 10px 0;
+}
+
 .social-link {
-  display: inline-block;
-  padding: 8px;
-  margin: 0 4px;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   text-decoration: none;
+  background: transparent;
 }
 
 .social-link:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(0, 0, 0, 0.05);
   transform: scale(1.1);
 }
 
 .social-link svg {
-  vertical-align: middle;
-  transition: fill 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .social-link:hover svg[fill="#0077B5"] {
@@ -338,4 +346,8 @@ footer {
 
 .social-link:hover svg[fill="#d32f2f"] {
   fill: #b71c1c;
+}
+
+.social-link:hover svg[fill="#ff6f00"] {
+  fill: #e65100;
 }
