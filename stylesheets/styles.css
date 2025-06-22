@@ -175,6 +175,12 @@ section {
   padding-bottom:50px;
 }
 
+/* About Me section text justification */
+section h1 + p {
+  text-align: justify;
+  line-height: 1.6;
+}
+
 small {
   font-size:11px;
 }
@@ -350,4 +356,115 @@ footer {
 
 .social-link:hover svg[fill="#ff6f00"] {
   fill: #e65100;
+}
+
+/* Blog layout - centered content without sidebar */
+.blog-layout {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.blog-layout header {
+  width: 100%;
+  float: none;
+  position: static;
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 30px;
+}
+
+.blog-layout header h1 {
+  margin-bottom: 5px;
+}
+
+.blog-layout header p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.blog-layout header .navigation {
+  margin-top: 15px;
+}
+
+.blog-layout header .navigation a {
+  margin: 0 15px;
+  color: #069;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.blog-layout header .navigation a:hover {
+  text-decoration: underline;
+}
+
+.blog-layout section {
+  width: 100%;
+  float: none;
+  padding: 0;
+}
+
+.blog-layout footer {
+  width: 100%;
+  float: none;
+  position: static;
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Blog article styles */
+.blog-layout article {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.blog-layout article:last-child {
+  border-bottom: none;
+}
+
+.blog-layout article h3 {
+  margin-bottom: 5px;
+}
+
+.blog-layout article h3 a {
+  color: #333;
+  text-decoration: none;
+}
+
+.blog-layout article h3 a:hover {
+  color: #069;
+  text-decoration: underline;
+}
+
+.blog-layout .article-meta {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.blog-layout .article-tags {
+  color: #888;
+  font-size: 14px;
+}
+
+/* Responsive adjustments for blog layout */
+@media print, screen and (max-width: 860px) {
+  .blog-layout {
+    padding: 15px;
+  }
+}
+
+@media print, screen and (max-width: 480px) {
+  .blog-layout {
+    padding: 10px;
+  }
+  
+  .blog-layout header .navigation a {
+    margin: 0 8px;
+    font-size: 14px;
+  }
 }
