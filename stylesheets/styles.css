@@ -103,6 +103,22 @@ img {
   max-width:100%;
 }
 
+img.article-image {
+  display:block;
+  width:70%;
+  max-width:360px;
+  height:auto;
+  margin:20px auto;
+}
+
+img.article-image-full {
+  display:block;
+  width:100%;
+  max-width:auto;
+  height:auto;
+  margin:20px auto;
+}
+
 header {
   width:270px;
   float:left;

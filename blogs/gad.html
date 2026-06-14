@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Restoring Initial Noise Sensitivity in Text-to-Image Distillation via Geometric Alignment: A Summary</title>
+
+    <link rel="stylesheet" href="../stylesheets/styles.css">
+    <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)'], ['$', '$']],
+          displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->  </head>
+  <body>
+    <div class="blog-layout">
+      <header>
+        <h1>Pallabjyoti Deka</h1>
+        <p>Blog Article</p>
+        <div class="navigation">
+          <a href="index.html">← Back to Blog</a>
+          <a href="../index.html">Portfolio</a>
+          <a href="https://github.com/pjd96">GitHub</a>
+        </div>
+      </header>
+      <section>
+        <h1>Restoring Initial Noise Sensitivity in Text-to-Image Distillation via Geometric Alignment: A Summary</h1>
+        <p class="article-meta">Published: June 14, 2026 | Reading Time: 15 min | Category: Distillation</p>
+        
+        <p>
+          This article summarizes the ICML 2026 paper "Restoring Initial Noise Sensitivity in Text-to-Image Distillation via Geometric Alignment" by Huang et al.
+        </p>
+        
+        <h2>Abstract</h2>
+        <p>Generative distillation significantly accelerates text-to-image (T2I) generation by compressing multi-step trajectories into few-step student models while preserving perceptual quality. However, existing methods primarily optimize efficiency and output fidelity, often neglecting critical properties of the original trajectory. In this work, we identify a key missing property: sensitivity to initial noise, whose degradation impairs downstream control methods relying on noise-based optimization and manipulation. We trace this issue to standard distillation objectives that enforce pointwise output alignment, inadvertently flattening the input-output landscape and suppressing the teacher’s local geometric structure. To address this, we propose Geometry-Aware Distillation (GAD), a sensitivity-preserving framework that aligns the local functional behavior of teacher and student models. Specifically, GAD matches Jacobian-vector products with respect to input noise, enabling the student to reproduce the teacher’s differential response to perturbations. Extensive experiments across multiple T2I paradigms and noise-driven control tasks demonstrate that GAD significantly restores sensitivity and improves diversity while maintaining high visual fidelity.</p>
+
+        <h2>Problem Statement</h2>
+        <p>
+          Existing diffusion distillation methods mainly treat the teacher model as an input-output mapper, prioritize final alignment, and do not focus on the intermediate steps. As a result, several properties of the original generative process are often ignored. This can be seen from the fact that the teacher model is highly sensitive to the initial noise, whereas the distilled model is not. The distilled model often produces highly correlated samples and responds weakly to noise perturbations. This is mainly due to the limitations of current distillation objectives.
+
+          The authors argue that standard methods for teaching a smaller "Student" model to mimic a larger "Teacher" model are fundamentally limited. Standard methods try to force the student to copy the teacher's exact output for every input.
+          
+          The problem is that for complex tasks, the teacher might have multiple valid ways to solve a problem (multi-modal outputs). By forcing the student to minimize its error across all these possibilities, the student ends up predicting a blurry "average" of the teacher's knowledge, rather than capturing the sharp, detailed, and specific ways the teacher actually makes decisions (its "local geometric structure").<br>
+
+          <b>Pointwise Alignment</b> When the exact input is given to both teacher and student models, the current methods try to match the outputs only rather than learning the teacher's response function. This leads to overlooking the differential structure of the generative mapping, which can misalign local gradients.<br>
+          <b>Smoothed Conditional Expectation</b> Current objectives such as reverse KL or MSE encourage the student to approximate an average of the potential multi-modal outputs.<br>
+          
+          <img class="article-image" src="../images/gad/gad-1.png" alt="source:Restoring Initial Noise Sensitivity in Text-to-Image Distillation via Geometric Alignment, ICML 2026">
+
+          In the figure shown, the Jacobian-vector product error shows that there is a high mismatch in local alignment.<br>
+          To mitigate the above issues, authors propose <b>Geometry-Aware Distillation (GAD)</b> that forces <i>response alignment</i> on the student model to replicate the teacher's Jacobian-vector products with respect to the input.
+        </p>
+
+        <h2>Methodology</h2>
+        Geometric-Aware Distillation (GAD) works as a model-agnostic regularization term that can be integrated with current distillation paradigms.
+
+        <ol>
+          <li>
+            Element-wise alignment between the Jacobian matrices is enforced by minimizing the Frobenius norm.
+            <p>
+              \[
+              \mathcal{L}_{Jacobian} = \mathbb{E}_{z \sim p(z)} \left[ \| J_{\Phi_S}(z) - J_{\Phi_T}(z) \|_F^2 \right]
+              \]
+              where \(J_{\Phi_S}(z) = \nabla_z \Phi_S(z)\), and \(\nabla_z \Phi(z)\) is the gradient of the network output with respect to the input noise.
+            </p>
+          </li>
+          <li>
+            <b>Jacobian-Vector Product (JVP) Alignment.</b> The authors propose aligning directional derivatives to capture the local geometry. For a random perturbation vector \(\mathbf{v} \sim \mathcal{N}(0, I)\), the JVP shows the model's response to the perturbation.
+            <p>
+              \[
+              \mathcal{L}_{GAD}(\theta) = \mathbb{E}_{z,\mathbf{v}} \left[ \| \nabla_z {\Phi_S}(z;\theta)\cdot \mathbf{v} - \nabla_z {\Phi_T}(z)\cdot \mathbf{v} \|_2^2 \right]
+              \]
+            </p>
+          </li>
+
+          <li>
+            <b>Finite Differences for efficient approximation.</b> The authors compute the above JVP using a finite differences scheme for higher efficiency and broad applicability. They first perturb input \(z\) by a small magnitude \(h\) in the direction of \(v\).
+            <p>
+              \[
+              \nabla_z {\Phi}(z) \cdot \mathbf{v} \approx \frac{\Phi(z + h\mathbf{v}) - \Phi(z)}{h}
+              \]
+            </p>
+          </li>
+        </ol>
+
+        The final objective looks like the following:
+        <p>
+              \[
+              \mathcal{L}_{GAD}(\theta) = \mathbb{E}_{z,\mathbf{v}} \left[ \| \left({\Phi_S}(z') - {\Phi_S}(z)\right) -\text{sg} \left({\Phi_T}(z') - \Phi_T(z)\right) \|_2^2 \right]
+              \]
+              where \(z'=z+h\mathbf{v}\) and \(sg(\cdot)\) denotes stop-gradient operator.
+        </p>
+
+        <img class="article-image-full" src="../images/gad/gad-2.png" alt="source:Restoring Initial Noise Sensitivity in Text-to-Image Distillation via Geometric Alignment, ICML 2026">
+
+        The GAD objective enforces the student response \(\left({\Phi_S}(z') - {\Phi_S}(z)\right)\) to match the teacher response \(\left({\Phi_T}(z') - {\Phi_T}(z)\right)\).<br><br>
+
+        The final objective can be used in many different distillation frameworks as follows:
+        <p>
+              \[
+              \mathcal{L}_{total} = \mathcal{L}_{base} + \lambda \mathcal{L}_{GAD}.
+              \]
+        </p>
+        
+        <hr>
+        <p><strong>Tags:</strong> Diffusion models, Flow matching, Distillation</p>
+        
+        <h3>Related Articles</h3>
+        <p><em>More articles coming soon!</em></p>
+          <h3>Share This Article</h3>
+        <p>Found this article helpful? Share it with your network or <a href="https://github.com/pjd96">connect with me on GitHub</a> to discuss more about web development trends.</p>
+      </section>
+      <footer>
+        <p>This blog is maintained by <a href="https://github.com/pjd96">Pallabjyoti Deka</a></p>
+        <p><small>Hosted on GitHub Pages</small></p>
+      </footer>
+    </div>
+    <script src="../javascripts/scale.fix.js"></script>
+  </body>
+</html>
