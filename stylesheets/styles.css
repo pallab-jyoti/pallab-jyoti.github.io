@@ -412,6 +412,7 @@ body[data-font-size="large"] {
 body[data-theme] {
   background-color: var(--blog-background);
   color: var(--blog-text);
+  padding: 24px;
 }
 
 .blog-layout {
@@ -468,11 +469,15 @@ body[data-theme] {
 }
 
 .blog-layout header .navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 14px;
   margin-top: 15px;
 }
 
 .blog-layout header .navigation a {
-  margin: 0 15px;
+  margin: 0;
   color: var(--blog-link-hover);
   text-decoration: none;
   font-weight: 500;
@@ -497,6 +502,8 @@ body[data-theme] {
 .blog-layout .reader-controls .control-group {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -531,6 +538,15 @@ body[data-theme="dark"] .blog-layout .reader-controls button:hover {
 
 .blog-layout .reader-controls button[data-theme-toggle] {
   min-width: 110px;
+}
+
+/* Keep displayed equations readable on small screens without horizontal page scrolling. */
+.blog-layout mjx-container[display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
 }
 
 .blog-layout section {
@@ -587,19 +603,51 @@ body[data-theme="dark"] .blog-layout .reader-controls button:hover {
 
 /* Responsive adjustments for blog layout */
 @media print, screen and (max-width: 860px) {
+  body[data-theme] {
+    padding: 14px;
+  }
+
   .blog-layout {
     padding: 15px;
   }
 }
 
+@media print, screen and (max-width: 640px) {
+  .blog-layout {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .blog-layout .reader-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .blog-layout .reader-controls .control-group {
+    justify-content: center;
+  }
+
+  .blog-layout .reader-controls button[data-theme-toggle] {
+    width: 100%;
+  }
+
+  .blog-layout mjx-container[display="true"] {
+    font-size: 0.92em;
+  }
+}
+
 @media print, screen and (max-width: 480px) {
+  body[data-theme] {
+    padding: 8px;
+  }
+
   .blog-layout {
     padding: 10px;
   }
   
   .blog-layout header .navigation a {
-    margin: 0 8px;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .blog-layout .reader-controls {
