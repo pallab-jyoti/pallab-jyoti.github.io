@@ -375,10 +375,77 @@ footer {
 }
 
 /* Blog layout - centered content without sidebar */
+body[data-theme="light"] {
+  --blog-background: #ffffff;
+  --blog-text: #595959;
+  --blog-heading: #222222;
+  --blog-muted: #666666;
+  --blog-border: #e5e5e5;
+  --blog-surface: #f7f8fa;
+  --blog-link: #39c;
+  --blog-link-hover: #069;
+}
+
+body[data-theme="dark"] {
+  --blog-background: #0f131a;
+  --blog-text: #d5d9e0;
+  --blog-heading: #f4f7fb;
+  --blog-muted: #a6afbb;
+  --blog-border: #283040;
+  --blog-surface: #181e27;
+  --blog-link: #8ecbff;
+  --blog-link-hover: #b7ddff;
+}
+
+body[data-font-size="small"] {
+  --blog-font-size: 15px;
+}
+
+body[data-font-size="medium"] {
+  --blog-font-size: 17px;
+}
+
+body[data-font-size="large"] {
+  --blog-font-size: 19px;
+}
+
+body[data-theme] {
+  background-color: var(--blog-background);
+  color: var(--blog-text);
+}
+
 .blog-layout {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  color: var(--blog-text);
+  font-size: var(--blog-font-size, 17px);
+  line-height: 1.75;
+  background-color: var(--blog-background);
+}
+
+.blog-layout a {
+  color: var(--blog-link);
+}
+
+.blog-layout a:hover {
+  color: var(--blog-link-hover);
+}
+
+.blog-layout h1,
+.blog-layout h2,
+.blog-layout h3,
+.blog-layout h4,
+.blog-layout h5,
+.blog-layout h6 {
+  color: var(--blog-heading);
+}
+
+.blog-layout p,
+.blog-layout li,
+.blog-layout .article-meta,
+.blog-layout .article-tags {
+  color: var(--blog-text);
 }
 
 .blog-layout header {
@@ -387,7 +454,7 @@ footer {
   position: static;
   text-align: center;
   padding: 20px 0;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--blog-border);
   margin-bottom: 30px;
 }
 
@@ -397,7 +464,7 @@ footer {
 
 .blog-layout header p {
   margin: 5px 0;
-  color: #666;
+  color: var(--blog-muted);
 }
 
 .blog-layout header .navigation {
@@ -406,13 +473,64 @@ footer {
 
 .blog-layout header .navigation a {
   margin: 0 15px;
-  color: #069;
+  color: var(--blog-link-hover);
   text-decoration: none;
   font-weight: 500;
 }
 
 .blog-layout header .navigation a:hover {
   text-decoration: underline;
+}
+
+.blog-layout .reader-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto 24px;
+  padding: 14px 16px;
+  background: var(--blog-surface);
+  border: 1px solid var(--blog-border);
+  border-radius: 12px;
+}
+
+.blog-layout .reader-controls .control-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.blog-layout .reader-controls .control-label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--blog-muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.blog-layout .reader-controls button {
+  appearance: none;
+  border: 1px solid var(--blog-border);
+  background: transparent;
+  color: var(--blog-heading);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.blog-layout .reader-controls button:hover {
+  background: rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
+}
+
+body[data-theme="dark"] .blog-layout .reader-controls button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.blog-layout .reader-controls button[data-theme-toggle] {
+  min-width: 110px;
 }
 
 .blog-layout section {
@@ -428,14 +546,14 @@ footer {
   text-align: center;
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--blog-border);
 }
 
 /* Blog article styles */
 .blog-layout article {
   margin-bottom: 40px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--blog-border);
 }
 
 .blog-layout article:last-child {
@@ -447,23 +565,23 @@ footer {
 }
 
 .blog-layout article h3 a {
-  color: #333;
+  color: var(--blog-heading);
   text-decoration: none;
 }
 
 .blog-layout article h3 a:hover {
-  color: #069;
+  color: var(--blog-link-hover);
   text-decoration: underline;
 }
 
 .blog-layout .article-meta {
-  color: #666;
+  color: var(--blog-muted);
   font-style: italic;
   margin-bottom: 10px;
 }
 
 .blog-layout .article-tags {
-  color: #888;
+  color: var(--blog-muted);
   font-size: 14px;
 }
 
@@ -482,5 +600,9 @@ footer {
   .blog-layout header .navigation a {
     margin: 0 8px;
     font-size: 14px;
+  }
+
+  .blog-layout .reader-controls {
+    padding: 12px;
   }
 }
