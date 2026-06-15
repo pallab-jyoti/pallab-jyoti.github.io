@@ -106,7 +106,7 @@ img {
 img.article-image {
   display:block;
   width:70%;
-  max-width:360px;
+  max-width:540px;
   height:auto;
   margin:20px auto;
 }
